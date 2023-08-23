@@ -21,7 +21,7 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!catData) {
-      res.status(400).json({ message: "No category card found with that id." });
+      res.status(404).json({ message: "No category card found with that id." });
       return;
     }
     res.status(200).json(catData);
@@ -33,7 +33,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const catData = await Category.create({
-      category_id: req.body.category_id,
+      category_name: req.body.category_name,
     });
     res.status(200).json(catData);
   } catch (err) {
@@ -43,14 +43,12 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   try {
-    const catData = await Category.update(
-      { title: req.body.title },
-      {
-        where: {
-          id: req.params.id,
-        },
-      }
-    );
+    const catData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+
     res.status(200).json(catData);
   } catch (err) {
     res.status(400).json(err);
